@@ -39,10 +39,12 @@ app.use(cors({
 app.use(express.json());
 
 if (process.env.NODE_ENV !== 'test') {
-  const mongoUri = process.env.MONGO_URI || 'mongodb://mongo:27017/ecommerce';
-  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }).catch((err) => {
-    console.error('MongoDB connection error:', err.message);
-  });
+  const mongoUri = process.env.MONGO_URI;
+  if (mongoUri) {
+    mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }).catch((err) => {
+      console.error('MongoDB connection error:', err.message);
+    });
+  }
 }
 
 const productSchema = new mongoose.Schema({
@@ -172,7 +174,7 @@ if (process.env.DATABASE_URL) {
   });
 
   pool.on('error', (err) => {
-    console.error('Unexpected error on idle client', err);
+    console.error('PostgreSQL connection error:', err.message);
   });
 }
 
