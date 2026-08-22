@@ -29,6 +29,8 @@ function App() {
 
   const pollRef = useRef(null);
 
+  const API_BASE_URL = 'https://eyouth-30908071602253-shop-sphere.vercel.app';
+
   const parseJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -49,7 +51,7 @@ function App() {
   };
 
   const fetchProducts = () => {
-    fetch('http://localhost:5000/api/products', {
+    fetch(`${API_BASE_URL}/api/products`, {
       headers: {
         ...getAuthHeaders()
       }
@@ -102,7 +104,7 @@ function App() {
 
     if (authMode === 'login') {
       if (email === 'admin@deci.com' && password === '0000') {
-        fetch('http://localhost:5000/api/auth/login', {
+        fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -125,7 +127,7 @@ function App() {
         return;
       }
 
-      fetch('http://localhost:5000/api/auth/login', {
+      fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -207,7 +209,7 @@ function App() {
     setNewAuthor(''); 
     setNewPrice('');
 
-    fetch('http://localhost:5000/api/products', {
+    fetch(`${API_BASE_URL}/api/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify({
@@ -223,8 +225,9 @@ function App() {
     })
     .catch(err => console.error('Network error, book kept locally:', err));
   };
+
   const handleDeleteBook = (id) => {
-    fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE', headers: { ...getAuthHeaders() } })
+    fetch(`${API_BASE_URL}/api/products/${id}`, { method: 'DELETE', headers: { ...getAuthHeaders() } })
       .then(() => {
         setBooks(books.filter(book => book.id !== id));
       })
