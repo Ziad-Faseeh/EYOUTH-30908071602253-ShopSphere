@@ -4,10 +4,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const app = express();
+const { Pool } = require('pg');
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const app = express();
 
 app.use(helmet());
 
@@ -41,7 +40,9 @@ app.use(express.json());
 
 if (process.env.NODE_ENV !== 'test') {
   const mongoUri = process.env.MONGO_URI || 'mongodb://mongo:27017/ecommerce';
-  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }).catch(() => {});
+  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }).catch((err) => {
+    console.error('MongoDB connection error:', err.message);
+  });
 }
 
 const productSchema = new mongoose.Schema({
@@ -111,7 +112,9 @@ app.get('/api/products', async (req, res) => {
   try {
     const docs = await Product.find({}).lean().exec().catch(() => []);
     if (docs && docs.length > 0) return res.json(docs);
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error fetching products:', e.message);
+  }
   return res.json(staticProducts);
 });
 
@@ -125,6 +128,7 @@ app.post('/api/products', authenticate, async (req, res) => {
     await p.save();
     return res.status(201).json(p);
   } catch (e) {
+    console.error('Error saving product:', e.message);
     return res.status(500).json({ message: 'Failed to save' });
   }
 });
@@ -137,6 +141,7 @@ app.delete('/api/products/:id', authenticate, async (req, res) => {
     await Product.deleteOne({ id }).exec().catch(() => {});
     return res.status(200).json({ success: true });
   } catch (e) {
+    console.error('Error deleting product:', e.message);
     return res.status(500).json({ message: 'Delete failed' });
   }
 });
@@ -160,19 +165,22 @@ app.post('/api/auth/login', (req, res) => {
   return res.status(401).json({ message: 'Invalid credentials' });
 });
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(5000, () => console.log('Server running on port 5000'));
+if (process.env.DATABASE_URL) {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
+  pool.on('error', (err) => {
+    console.error('Unexpected error on idle client', err);
+  });
 }
 
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
-});
-
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'UP' });
-});
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
