@@ -164,4 +164,15 @@ if (process.env.NODE_ENV !== 'test') {
   app.listen(5000, () => console.log('Server running on port 5000'));
 }
 
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP' });
+});
+
 module.exports = app;
