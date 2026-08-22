@@ -26,6 +26,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'ShopSphere API Server is running', version: '1.0.0', endpoints: ['/health', '/api/products', '/api/auth/login'] });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP' });
 });
