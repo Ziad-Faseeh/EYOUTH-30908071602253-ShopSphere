@@ -50,7 +50,7 @@ pool.on('error', (err) => {
 const initDb = async () => {
   app.get('/api/external-reviews', async (req, res) => {
   try {
-    const response = await fetch('https://eyouth-30908071602253-shopsphere-review-service.vercel.app/api/reviews');
+    const response = await fetch('https://eyouth-30908071602253-shopsphere-re.vercel.app/');
     const data = await response.json();
     return res.status(200).json(data);
   } catch (e) {
