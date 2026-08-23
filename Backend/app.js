@@ -50,7 +50,7 @@ pool.on('error', (err) => {
 const initDb = async () => {
   app.get('/api/external-reviews', async (req, res) => {
   try {
-    const response = await fetch('https://eyouth-30908071602253-shopsphere-re.vercel.app/');
+    const response = await fetch('https://eyouth-30908071602253-shopsphere-re.vercel.app/api/reviews');
     const data = await response.json();
     return res.status(200).json(data);
   } catch (e) {
@@ -237,5 +237,13 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Server running on port ${PORT}`);
   });
 }
+
+app.get('/api/background-task', (req, res) => {
+  return res.status(200).json({
+    status: 'success',
+    message: 'Background workload executed via Serverless Function',
+    timestamp: new Date().toISOString()
+  });
+});
 
 module.exports = app;
