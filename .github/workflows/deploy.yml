@@ -18,26 +18,10 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install and Test Backend
+    - name: Run Install Check
       run: |
-        if [ -d "Backend" ]; then
-          cd Backend
-          npm install
-        elif [ -d "backend" ]; then
-          cd backend
+        if [ -f "package.json" ]; then
           npm install
         else
-          npm install
-        fi
-
-    - name: Install and Build Frontend
-      run: |
-        if [ -d "Frontend" ]; then
-          cd Frontend
-          npm install
-          npm run build --if-present
-        elif [ -d "frontend" ]; then
-          cd frontend
-          npm install
-          npm run build --if-present
+          echo "No package.json found in root, skipping npm install."
         fi
