@@ -17,24 +17,26 @@ jobs:
     - name: Setup Node.js Environment
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '24'
+
+    - name: Install Root Dependencies
+      run: npm install
 
     - name: Install Backend
       run: |
         if [ -d "Backend" ]; then
           cd Backend && npm install
-        elif [ -d "backend" ]; then
-          cd backend && npm install
-        elif [ -f "package.json" ]; then
-          npm install
         else
-          echo "No Backend folder or package.json found."
+          echo "Backend directory not found."
         fi
 
     - name: Install and Build Frontend
       run: |
-        if [ -d "Frontend" ]; then
-          cd Frontend && npm install && npm run build --if-present
-        elif [ -d "frontend" ]; then
+        if [ -d "frontend" ]; then
           cd frontend && npm install && npm run build --if-present
+        else
+          echo "Frontend directory not found."
         fi
+
+    - name: Run Tests
+      run: npm test --if-present
