@@ -463,7 +463,9 @@ function App() {
               width: '100%'
             }}>
               {currentBooks.map(book => {
-                const bookReview = reviews.find(r => r.productId === book.id);
+                const bookReview = reviews.find(r => 
+                String(r.productId || r.bookId || r.id) === String(book.id || book._id)
+                );
                 return (
                   <div key={book.id} style={{ 
                     backgroundColor: '#fff', 
