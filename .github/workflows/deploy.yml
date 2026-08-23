@@ -26,8 +26,10 @@ jobs:
         elif [ -d "backend" ]; then
           cd backend
           npm install
-        else
+        elif [ -f "package.json" ]; then
           npm install
+        else
+          echo "No root package.json found, skipping backend install safely."
         fi
 
     - name: Install and Build Frontend
