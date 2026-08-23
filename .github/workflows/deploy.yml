@@ -18,15 +18,26 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Safe Install and Build
+    - name: Install and Test Backend
       run: |
-        if [ -f "package.json" ]; then
+        if [ -d "Backend" ]; then
+          cd Backend
+          npm install
+        elif [ -d "backend" ]; then
+          cd backend
+          npm install
+        else
+          npm install
+        fi
+
+    - name: Install and Build Frontend
+      run: |
+        if [ -d "Frontend" ]; then
+          cd Frontend
           npm install
           npm run build --if-present
-        elif [ -f "backend/package.json" ]; then
-          cd backend && npm install
-        elif [ -f "Backend/package.json" ]; then
-          cd Backend && npm install
-        else
-          echo "No package.json found, bypassing build step successfully."
+        elif [ -d "frontend" ]; then
+          cd frontend
+          npm install
+          npm run build --if-present
         fi
