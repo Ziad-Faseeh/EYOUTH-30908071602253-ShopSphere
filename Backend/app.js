@@ -238,4 +238,12 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
+app.get('/api/background-task', (req, res) => {
+  return res.status(200).json({
+    status: 'success',
+    message: 'Background workload executed via Serverless Function',
+    timestamp: new Date().toISOString()
+  });
+});
+
 module.exports = app;
