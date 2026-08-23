@@ -6,5 +6,11 @@
   "workspaces": [
     "Backend",
     "frontend"
-  ]
+  ],
+  "scripts": {
+    "install-all": "npm install && cd Backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "start:backend": "cd Backend && npm start",
+    "start:frontend": "cd frontend && npm start"
+  }
 }
