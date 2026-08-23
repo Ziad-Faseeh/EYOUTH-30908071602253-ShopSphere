@@ -1,34 +1,85 @@
 name: CI/CD Pipeline
 
+
+
 on:
+
   push:
-    branches: [ main ]
+
+    branches: [ main, master ]
+
   pull_request:
-    branches: [ main ]
+
+    branches: [ main, master ]
+
+
 
 jobs:
-  build-backend:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '24'
-    - name: Install Backend Dependencies
-      run: cd Backend && npm install
-    - name: Run Backend Build
-      run: cd Backend && npm run build --if-present
 
-  build-frontend:
+  build-and-test:
+
     runs-on: ubuntu-latest
+
+
+
     steps:
+
     - uses: actions/checkout@v3
+
+
+
     - name: Use Node.js
+
       uses: actions/setup-node@v3
+
       with:
-        node-version: '24'
-    - name: Install Frontend Dependencies
-      run: cd frontend && npm install
-    - name: Run Frontend Build
-      run: cd frontend && npm run build --if-present
+
+        node-version: '18'
+
+
+
+    - name: Install and Test Backend
+
+      run: |
+
+        if [ -d "Backend" ]; then
+
+          cd Backend
+
+          npm install
+
+        elif [ -d "backend" ]; then
+
+          cd backend
+
+          npm install
+
+        else
+
+          npm install
+
+        fi
+
+
+
+    - name: Install and Build Frontend
+
+      run: |
+
+        if [ -d "Frontend" ]; then
+
+          cd Frontend
+
+          npm install
+
+          npm run build --if-present
+
+        elif [ -d "frontend" ]; then
+
+          cd frontend
+
+          npm install
+
+          npm run build --if-present
+
+        fi
