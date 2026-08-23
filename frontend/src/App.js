@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
   const [books, setBooks] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -69,6 +70,17 @@ function App() {
       });
   };
 
+  const fetchReviews = () => {
+    fetch(`${API_BASE_URL}/api/external-reviews`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data) {
+          setReviews(data.data);
+        }
+      })
+      .catch(err => console.error(err));
+  };
+
   useEffect(() => {
     const token = getToken();
     if (token) {
@@ -87,6 +99,7 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       fetchProducts();
+      fetchReviews();
       if (pollRef.current) clearInterval(pollRef.current);
       pollRef.current = setInterval(fetchProducts, 10000);
     } else {
@@ -449,44 +462,55 @@ function App() {
               gap: '25px',
               width: '100%'
             }}>
-              {currentBooks.map(book => (
-                <div key={book.id} style={{ 
-                  backgroundColor: '#fff', 
-                  padding: '20px', 
-                  borderRadius: '12px', 
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.06)', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center',
-                  textAlign: 'center'
-                }}>
-                  <img 
-                    src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop&q=60" 
-                    alt="Book Cover" 
-                    style={{ width: '120px', height: '170px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-                  />
-                  <h3 style={{ margin: '10px 0 5px 0', color: '#2c3e50', fontSize: '16px', height: '40px', overflow: 'hidden' }}>{book.title}</h3>
-                  <p style={{ margin: '5px 0', color: '#7f8c8d', fontSize: '13px' }}>{book.author}</p>
-                  <p style={{ margin: '5px 0', color: '#007bff', fontSize: '12px', fontWeight: 'bold' }}>{book.category}</p>
-                  <p style={{ margin: '12px 0', fontWeight: 'bold', color: '#27ae60', fontSize: '18px' }}>${book.price}</p>
-                  <button 
-                    onClick={() => addToCart(book)}
-                    style={{ 
-                      backgroundColor: '#007bff', 
-                      color: '#fff', 
-                      border: 'none', 
-                      padding: '8px 15px', 
-                      borderRadius: '6px', 
-                      cursor: 'pointer', 
-                      fontWeight: 'bold',
-                      width: '100%',
-                      marginTop: 'auto'
-                    }}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              ))}
+              {currentBooks.map(book => {
+                const bookReview = reviews.find(r => r.productId === book.id);
+                return (
+                  <div key={book.id} style={{ 
+                    backgroundColor: '#fff', 
+                    padding: '20px', 
+                    borderRadius: '12px', 
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.06)', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center',
+                    textAlign: 'center'
+                  }}>
+                    <img 
+                      src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop&q=60" 
+                      alt="Book Cover" 
+                      style={{ width: '120px', height: '170px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+                    />
+                    <h3 style={{ margin: '10px 0 5px 0', color: '#2c3e50', fontSize: '16px', height: '40px', overflow: 'hidden' }}>{book.title}</h3>
+                    <p style={{ margin: '5px 0', color: '#7f8c8d', fontSize: '13px' }}>{book.author}</p>
+                    <p style={{ margin: '5px 0', color: '#007bff', fontSize: '12px', fontWeight: 'bold' }}>{book.category}</p>
+                    <p style={{ margin: '12px 0', fontWeight: 'bold', color: '#27ae60', fontSize: '18px' }}>${book.price}</p>
+                    
+                    {bookReview && (
+                      <div style={{ backgroundColor: '#f8f9fa', padding: '8px', borderRadius: '6px', margin: '8px 0', width: '100%', boxSizing: 'border-box' }}>
+                        <span style={{ fontSize: '12px', color: '#f39c12', fontWeight: 'bold' }}>⭐ {bookReview.rating}/5</span>
+                        <p style={{ margin: '4px 0 0 0', fontSize: '11px', color: '#555', fontStyle: 'italic' }}>"{bookReview.comment}"</p>
+                      </div>
+                    )}
+
+                    <button 
+                      onClick={() => addToCart(book)}
+                      style={{ 
+                        backgroundColor: '#007bff', 
+                        color: '#fff', 
+                        border: 'none', 
+                        padding: '8px 15px', 
+                        borderRadius: '6px', 
+                        cursor: 'pointer', 
+                        fontWeight: 'bold',
+                        width: '100%',
+                        marginTop: 'auto'
+                      }}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
             {currentBooks.length === 0 && (
