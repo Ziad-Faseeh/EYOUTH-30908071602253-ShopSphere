@@ -48,6 +48,21 @@ pool.on('error', (err) => {
 });
 
 const initDb = async () => {
+  app.get('/api/external-reviews', async (req, res) => {
+  try {
+    const response = await fetch('https://eyouth-30908071602253-shopsphere-review-service.vercel.app/api/reviews');
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (e) {
+    console.error(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'ERROR',
+      message: 'Failed to fetch external reviews',
+      error: e.message
+    }));
+    return res.status(500).json({ success: false, message: 'External review fetch failed' });
+  }
+});
   if (process.env.NODE_ENV === 'test' || !process.env.DATABASE_URL) return;
   try {
     await pool.query(`
