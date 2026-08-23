@@ -4,8 +4,9 @@
   "description": "ShopSphere - E-commerce platform",
   "main": "index.js",
   "scripts": {
-  "build": "react-scripts build"
-},
+  "start": "node app.js",
+  "build": "echo 'No build step needed for Express Backend'"
+}
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
