@@ -18,10 +18,15 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Run Install Check
+    - name: Safe Install and Build
       run: |
         if [ -f "package.json" ]; then
           npm install
+          npm run build --if-present
+        elif [ -f "backend/package.json" ]; then
+          cd backend && npm install
+        elif [ -f "Backend/package.json" ]; then
+          cd Backend && npm install
         else
-          echo "No package.json found in root, skipping npm install."
+          echo "No package.json found, bypassing build step successfully."
         fi
