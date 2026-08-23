@@ -4,12 +4,8 @@
   "description": "ShopSphere - E-commerce platform",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest"
-  },
+  "build": "react-scripts build"
+},
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
