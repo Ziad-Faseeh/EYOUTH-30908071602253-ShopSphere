@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   build-and-test:
@@ -18,8 +18,26 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install Dependencies
-      run: npm install
+    - name: Install and Test Backend
+      run: |
+        if [ -d "Backend" ]; then
+          cd Backend
+          npm install
+        elif [ -d "backend" ]; then
+          cd backend
+          npm install
+        else
+          npm install
+        fi
 
-    - name: Run Build
-      run: npm run build --if-present
+    - name: Install and Build Frontend
+      run: |
+        if [ -d "Frontend" ]; then
+          cd Frontend
+          npm install
+          npm run build --if-present
+        elif [ -d "frontend" ]; then
+          cd frontend
+          npm install
+          npm run build --if-present
+        fi
