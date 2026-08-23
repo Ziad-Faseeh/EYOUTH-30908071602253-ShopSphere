@@ -11,35 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-    - name: Use Node.js
+    - name: Setup Node.js Environment
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
-    - name: Install and Test Backend
+    - name: Install Backend
       run: |
         if [ -d "Backend" ]; then
-          cd Backend
-          npm install
+          cd Backend && npm install
         elif [ -d "backend" ]; then
-          cd backend
-          npm install
+          cd backend && npm install
         elif [ -f "package.json" ]; then
           npm install
         else
-          echo "No root package.json found, skipping backend install safely."
+          echo "No Backend folder or package.json found."
         fi
 
     - name: Install and Build Frontend
       run: |
         if [ -d "Frontend" ]; then
-          cd Frontend
-          npm install
-          npm run build --if-present
+          cd Frontend && npm install && npm run build --if-present
         elif [ -d "frontend" ]; then
-          cd frontend
-          npm install
-          npm run build --if-present
+          cd frontend && npm install && npm run build --if-present
         fi
