@@ -101,7 +101,6 @@ function App() {
       fetchProducts();
       fetchReviews();
       if (pollRef.current) clearInterval(pollRef.current);
-      pollRef.current = setInterval(fetchProducts, 10000);
     } else {
       if (pollRef.current) {
         clearInterval(pollRef.current);
@@ -524,7 +523,7 @@ function App() {
                 <button 
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => prev - 1)}
-                  style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: currentPage === 1 ? '#e0e0e0' : '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                  style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: currentPage === 1 ? '#e0e0e0' : '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
                 >
                   Previous
                 </button>
@@ -532,7 +531,7 @@ function App() {
                 <button 
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => prev + 1)}
-                  style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: currentPage === totalPages ? '#e0e0e0' : '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+                  style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: currentPage === totalPages ? '#e0e0e0' : '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
                 >
                   Next
                 </button>
@@ -561,7 +560,7 @@ function App() {
               ) : (
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {cart.map((item, index) => (
-                    <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', backgroundColor: '#fafafa', padding: '8px', borderRadius: '6px' }}>
+                    <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', backgroundColor: '#fafafa', padding: '8px', borderRadius: '4px' }}>
                       <div style={{ flex: 1, marginRight: '10px' }}>
                         <span style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '140px', display: 'block', fontWeight: 'bold', fontSize: '13px' }}>{item.title}</span>
                         <span style={{ color: '#27ae60', fontSize: '13px' }}>${item.price}</span>
@@ -630,19 +629,19 @@ function App() {
             <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#333' }}>Add New Book</h3>
             <div style={{ marginBottom: '15px' }}>
               <label htmlFor="new-title" style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>Title</label>
-              <input id="new-title" type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px' }} />
+              <input id="new-title" type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }} />
             </div>
             <div style={{ marginBottom: '15px' }}>
               <label htmlFor="new-author" style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>Author</label>
-              <input id="new-author" type="text" required value={newAuthor} onChange={(e) => setNewAuthor(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px' }} />
+              <input id="new-author" type="text" required value={newAuthor} onChange={(e) => setNewAuthor(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }} />
             </div>
             <div style={{ marginBottom: '15px' }}>
               <label htmlFor="new-price" style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>Price ($)</label>
-              <input id="new-price" type="number" step="0.01" required value={newPrice} onChange={(e) => setNewPrice(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px' }} />
+              <input id="new-price" type="number" step="0.01" required value={newPrice} onChange={(e) => setNewPrice(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }} />
             </div>
             <div style={{ marginBottom: '20px' }}>
               <label htmlFor="new-category" style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>Category</label>
-              <select id="new-category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px' }}>
+              <select id="new-category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }}>
                 <option value="Stories">Stories</option>
                 <option value="Science">Science</option>
                 <option value="History">History</option>
